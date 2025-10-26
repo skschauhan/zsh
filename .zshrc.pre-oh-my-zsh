@@ -1,0 +1,25 @@
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Custom alias
+alias codews='cd /home/it/workspace/webapplications/ ; code .'
+alias ws='cd /home/it/workspace/webapplications/'
+alias qwc='cd /home/it/workspace/webapplications/qwc/'
+alias pwc='cd /home/it/workspace/webapplications/platform-components-ng/'
+alias appsv='cd /home/it/workspace/webapplications/application-services/'
+alias admin='cd /home/it/workspace/webapplications/admin/'
+alias workspace='cd /home/it/workspace/webapplications/workspace/'
+alias appsvmdl='cd /home/it/workspace/webapplications/application-services-model/'
+alias qa='cd /home/it/workspace/quarkauthor/'
+alias codeqa='cd /home/it/workspace/quarkauthor/ ; code .'
+alias as='cd /home/it/workspace/authservice/'
+alias cl='clear'
+
+# Misc
+PS1='%F{green}%B%n@%m%b%f:%F{blue}%~%f$ '
+precmd() { print -Pn "\e]0;%n@%m:%~\a" }
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.zsh_history
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY

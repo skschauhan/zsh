@@ -1,0 +1,168 @@
+
+# Function to print a message in the center of the terminal width-wise
+print_centered_message() {
+  local MESSAGE="$1"
+  tput cup 0 $(( ($(tput cols) / 2) - (${#MESSAGE} / 2) ))
+  echo "$MESSAGE"
+}
+
+# Function to open a new crome tab in the terminal
+nd() {
+    local BASE_URL=$1
+    local CONTENT_TYPE=${2:-"Document"}
+    local PATH="/#"
+
+    if [[ -z "$BASE_URL" ]]; then
+        echo "Usage: newDoc <base_url_or_keyword>"
+        return 1
+    fi
+
+    if [[ "$BASE_URL" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(:[0-9]+)?$ || "$BASE_URL" == *"localhost"* ]]; then
+        # If localhost, use port 3002
+        if [[ "$BASE_URL" == "localhost" ]]; then
+            BASE_URL="http://localhost:3002"
+        elif [[ "$BASE_URL" =~ :[0-9]+$ ]]; then
+        else
+            # If IP without port, use the workspace path
+            PATH="/workspace${PATH}/author"
+        fi
+    else
+        # Otherwise, treat it as a keyword and append ".quark.com"
+        BASE_URL="${BASE_URL}.quark.com"
+        PATH="/workspace${PATH}/author"
+    fi
+
+    /opt/google/chrome/google-chrome --new-tab "${BASE_URL}${PATH}/edit?uri=qpp:%2F%2Fassets%2F-1&contentType=Smart%20${CONTENT_TYPE}"
+}
+
+# open new document on localhost:3002
+ndlocal() {
+    nd "localhost"
+}
+
+# open new document on dev
+nddev() {
+    nd "dev.app"
+}
+
+# Ignore Long commands
+function zshaddhistory() {
+  # If the command ($1) is longer than 200 characters, do not add it to history.
+  (( ${#1} > 200 )) && return 1 || return 0
+}
+
+# ---------------------------------------------------------------------------
+WS="$HOME/workspace/webapplications"
+QWCLIB="$WS/qwc/dist-lib/qwc"
+QWCNM="node_modules/@quark/qwc/"
+PWCLIB="$WS/platform-components-ng/dist/platform-components-lib"
+PWCNM="node_modules/@quark/platform-components-ng/"
+APPMDLLIB="$WS/application-services-model/dist"
+APPMDLNM="node_modules/@quark/application-services-model/"
+
+# Custom alias
+alias zsource="source $HOME/.zshrc"
+alias wa="cd $WS/"
+alias qwc="cd $WS/qwc/"
+alias pwc="cd $WS/platform-components-ng/"
+alias aps="cd $HOME/workspace/applicationservices/"
+alias admin="cd $WS/admin/"
+alias ws="cd $WS/workspace/"
+alias apsmd="cd $WS/application-services-model/"
+alias qa="cd $WS/author"
+alias sdk="cd $HOME/workspace/sdk/"
+alias qas="cd $HOME/workspace/qaservice/"
+alias as="cd $HOME/workspace/authservice/"
+alias ls="ls --color"
+alias celar="clear"
+alias cl="clear"
+alias kill="fuser -k -n tcp"
+alias cppwc="cp -R -f $PWCLIB/* $WS/author/$PWCNM && cp -R -f $PWCLIB/* $WS/admin/$PWCNM && cp -R -f $PWCLIB/* $WS/workspace/$PWCNM"
+alias cpamd="cp -R -f $APPMDLLIB/* $WS/platform-components-ng/$APPMDLNM && cp -R -f $APPMDLLIB/* $WS/author/$APPMDLNM && cp -R -f $APPMDLLIB/* $WS/admin/$APPMDLNM && cp -R -f $APPMDLLIB/* $WS/workspace/$APPMDLNM"
+alias cpqwc="cp -R -f $QWCLIB/* $WS/platform-components-ng/$QWCNM  && cp -R -f $QWCLIB/* $WS/author/$QWCNM && cp -R -f $QWCLIB/* $WS/admin/$QWCNM && cp -R -f $QWCLIB/* $WS/workspace/$QWCNM"
+
+# VsCode alias
+alias cws="code $WS"
+alias cqas="code $HOME/workspace/qaservice"
+alias caps="code $HOME/workspace/applicationservices"
+alias cas="code $HOME/workspace/authservice"
+alias csdk="code $HOME/workspace/sdk"
+alias cdc="code $HOME/workspace/docker-compose"
+alias czsh="code $HOME/.custom_operations"
+alias czshp10="code $HOME/.p10k.zsh"
+
+# --------------------------------------------------------------------------
+alias code_update="wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' -O /tmp/code_latest_amd64.deb\n
+sudo dpkg -i /tmp/code_latest_amd64.deb"
+
+# Git alias
+alias gp="git pull"
+alias gpx="git pull origin"
+alias gpo="git push origin"
+alias gb="git checkout -b"
+alias gs="git switch"
+alias gsd="git switch dev"
+alias gmerge="git merge"
+alias gpub="git publish"
+alias grf="git checkout --"
+alias gcl="git clone"
+
+# Kubectl alias
+alias kdev="kubectl config use-context deveks"
+alias kpods="kubectl get pods"
+alias kexec="kubectl exec -it"
+alias klogs="kubectl logs -f"
+alias kcopy="kubectl cp"
+
+# Docker alias
+alias dbnc="docker build --no-cache -t"
+alias dcb="docker build -t"
+alias dexec="docker exec -it"
+alias dlogs="docker logs -f"
+alias dstop="docker stop"
+alias dstart="docker start"
+alias drst="docker restart"
+alias dprune="docker image prune"
+
+# MVN alias
+alias mci="mvn clean install"
+alias mcp="mvn clean package"
+
+# Yarn alias
+alias ys="yarn start"
+alias yb="yarn build"
+alias yi="yarn install"
+alias yt="yarn test"
+alias ytd="yarn test-debug"
+alias ytdl="yarn test-debug-lib"
+alias ytdw="yarn test-debug-webapp"
+
+# OpenVPN alias
+alias vpn-start="openvpn3 session-start --config '$HOME/client.ovpn'"
+alias vpn-stop="openvpn3 session-manage --disconnect --config '$HOME/client.ovpn'"
+alias vpn-list="openvpn3 sessions-list"
+
+# Misc alias
+alias chromeDev="google-chrome --disable-web-security --user-data-dir="/tmp/chrome_dev""
+alias rm="rm -rf"
+
+# SSH alias
+alias myvm="ssh ssc"
+alias arabian="ssh arabian"
+
+# Misc
+PS1="%F{green}%B%n@%m%b%f:%F{blue}%~%f$ "
+precmd() { print -Pn "\e]0;%n@%m:%~\a" }
+
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+setopt hist_ignore_space
